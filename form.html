@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>[CLIENT BUSINESS NAME] - Customer Feedback</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 32px 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+        
+        .business-logo {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        
+        .business-logo h1 {
+            font-size: 28px;
+            color: #333;
+        }
+        
+        .business-logo p {
+            color: #666;
+            margin-top: 8px;
+        }
+        
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .rating-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .rating-btn {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            background: #f5f5f5;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .rating-btn.selected {
+            background: #667eea;
+            color: white;
+        }
+        
+        .yesno-group {
+            display: flex;
+            gap: 16px;
+        }
+        
+        .yesno-btn {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            background: #f5f5f5;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .yesno-btn.selected {
+            background: #667eea;
+            color: white;
+        }
+        
+        button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+        }
+        
+        button:disabled {
+            opacity: 0.6;
+            transform: none;
+            cursor: not-allowed;
+        }
+        
+        .success-message {
+            text-align: center;
+            padding: 40px;
+            background: #e8f5e9;
+            border-radius: 24px;
+            color: #2e7d32;
+        }
+        
+        .error-message {
+            text-align: center;
+            padding: 40px;
+            background: #ffebee;
+            border-radius: 24px;
+            color: #c62828;
+        }
+        
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 480px) {
+            .card {
+                padding: 24px 16px;
+            }
+            .rating-group {
+                gap: 8px;
+            }
+            .rating-btn {
+                font-size: 14px;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="formContainer" class="card">
+            <div class="business-logo">
+                <!-- CUSTOMIZE THESE FOR EACH CLIENT -->
+                <h1>[BUSINESS NAME]</h1>
+                <p>We value your feedback</p>
+                <!-- END CUSTOMIZATION -->
+            </div>
+            
+            <form id="feedbackForm">
+                <div class="form-group">
+                    <label for="customerName">Your Name *</label>
+                    <input type="text" id="customerName" name="customerName" required placeholder="e.g., Jane Muthoni">
+                </div>
+                
+                <div class="form-group">
+                    <label for="service">Which service did you receive? *</label>
+                    <select id="service" name="service" required>
+                        <option value="">Select a service</option>
+                        <!-- CUSTOMIZE THESE SERVICES FOR EACH CLIENT -->
+                        <option value="Hair Wash & Blowdry">Hair Wash & Blowdry</option>
+                        <option value="Hair Cut & Styling">Hair Cut & Styling</option>
+                        <option value="Manicure">Manicure</option>
+                        <option value="Pedicure">Pedicure</option>
+                        <option value="Full Set Nails">Full Set Nails</option>
+                        <option value="Massage">Massage</option>
+                        <option value="Facial Treatment">Facial Treatment</option>
+                        <!-- END CUSTOMIZATION -->
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>How satisfied were you? *</label>
+                    <div class="rating-group" id="ratingGroup">
+                        <div class="rating-btn" data-value="1">1 😞</div>
+                        <div class="rating-btn" data-value="2">2 😐</div>
+                        <div class="rating-btn" data-value="3">3 🙂</div>
+                        <div class="rating-btn" data-value="4">4 😊</div>
+                        <div class="rating-btn" data-value="5">5 😍</div>
+                    </div>
+                    <input type="hidden" id="satisfaction" name="satisfaction" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Would you return to us? *</label>
+                    <div class="yesno-group" id="returningGroup">
+                        <div class="yesno-btn" data-value="Yes">Yes 👍</div>
+                        <div class="yesno-btn" data-value="No">No 👎</div>
+                        <div class="yesno-btn" data-value="Maybe">Maybe 🤔</div>
+                    </div>
+                    <input type="hidden" id="returning" name="returning" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="feedback">Any additional feedback?</label>
+                    <textarea id="feedback" name="feedback" rows="3" placeholder="Tell us how we can improve..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Your Email (optional - for follow up)</label>
+                    <input type="email" id="email" name="email" placeholder="you@example.com">
+                </div>
+                
+                <button type="submit" id="submitBtn">Submit Feedback</button>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // CONFIGURATION - CHANGE THESE FOR EACH CLIENT
+        const CLIENT_ID = "SALON001";  // Must match the client ID in your Google Sheet
+        const FORM_TYPE = "salon_feedback";  // Must match the form type in your Google Sheet
+        const WEB_APP_URL = "https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec";  // REPLACE with your Apps Script URL
+        
+        // Rating button logic
+        let selectedRating = null;
+        let selectedReturning = null;
+        
+        document.querySelectorAll('.rating-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                selectedRating = btn.dataset.value;
+                document.getElementById('satisfaction').value = selectedRating;
+            });
+        });
+        
+        document.querySelectorAll('.yesno-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.yesno-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                selectedReturning = btn.dataset.value;
+                document.getElementById('returning').value = selectedReturning;
+            });
+        });
+        
+        // Form submission
+        document.getElementById('feedbackForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Validate rating and returning are selected
+            if (!selectedRating) {
+                alert('Please select your satisfaction rating');
+                return;
+            }
+            if (!selectedReturning) {
+                alert('Please tell us if you would return');
+                return;
+            }
+            
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="spinner"></span> Submitting...';
+            
+            // Collect form data
+            const formData = {
+                clientId: CLIENT_ID,
+                formType: FORM_TYPE,
+                customerName: document.getElementById('customerName').value,
+                service: document.getElementById('service').value,
+                satisfaction: parseInt(selectedRating),
+                returning: selectedReturning,
+                feedback: document.getElementById('feedback').value,
+                email: document.getElementById('email').value
+            };
+            
+            try {
+                const response = await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',  // This prevents CORS errors
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                // Show success message
+                document.getElementById('formContainer').innerHTML = `
+                    <div class="success-message">
+                        <h2>✓ Thank You!</h2>
+                        <p>Your feedback has been submitted successfully.</p>
+                        <p style="margin-top: 20px; font-size: 14px;">We truly appreciate your input!</p>
+                    </div>
+                `;
+                
+            } catch (error) {
+                console.error('Error:', error);
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Submit Feedback';
+                alert('Something went wrong. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>
